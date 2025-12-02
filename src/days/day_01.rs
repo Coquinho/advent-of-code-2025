@@ -101,8 +101,7 @@ mod test {
 
     #[test]
     fn puzzle_part1() {
-        let input = std::fs::read_to_string("input/day_01.txt")
-            .expect("Failled to read file");
+        let input = std::fs::read_to_string("input/day_01.txt").expect("Failled to read file");
         assert_eq!(day01(input, false), 1191);
     }
 
@@ -145,8 +144,7 @@ mod test {
 
     #[test]
     fn puzzle_part2() {
-        let input = std::fs::read_to_string("input/day_01.txt")
-            .expect("Failled to read file");
+        let input = std::fs::read_to_string("input/day_01.txt").expect("Failled to read file");
         assert_eq!(day01(input, true), 6858);
     }
 }
