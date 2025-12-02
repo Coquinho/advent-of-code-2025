@@ -1,3 +1,10 @@
+pub fn read_from_str_one_liner<T: std::str::FromStr>(input: &str) -> Vec<T> {
+    input
+        .split(',')
+        .filter_map(|line| line.trim().parse().ok())
+        .collect()
+}
+
 pub fn read_from_str<T: std::str::FromStr>(input: &str) -> Vec<T> {
     input
         .lines()
