@@ -41,17 +41,15 @@ impl FromStr for Board {
         }
         board.push(vec![NON_BLOCK; width]);
 
-        Ok(Board{
-            board: board
-        })
+        Ok(Board { board: board })
     }
 }
 
 fn can_move(board: &Board, i: usize, j: usize) -> bool {
     let mut neighboors_count = 0;
 
-    for n_i in (i-1)..=(i+1) {
-        for n_j in (j-1)..=(j+1) {
+    for n_i in (i - 1)..=(i + 1) {
+        for n_j in (j - 1)..=(j + 1) {
             if n_i == i && n_j == j {
                 continue;
             }
@@ -60,7 +58,7 @@ fn can_move(board: &Board, i: usize, j: usize) -> bool {
             }
 
             if neighboors_count >= 4 {
-                return false; 
+                return false;
             }
         }
     }
@@ -73,9 +71,9 @@ fn day04part1(input: String) -> i32 {
 
     let board: Board = Board::from_str(&input).expect("Error parsing board");
 
-    for i in 1..(board.board.len()-1) {
+    for i in 1..(board.board.len() - 1) {
         let line = &board.board[i];
-        for j in 1..(line.len()-1) {
+        for j in 1..(line.len() - 1) {
             if line[j] != '@' {
                 continue;
             }
@@ -94,7 +92,7 @@ mod test {
     use super::*;
 
     #[test]
-    fn example_par1(){
+    fn example_par1() {
         let input = "..@@.@@@@.\n@@@.@.@.@@\n@@@@@.@.@@\n@.@@@@..@.\n@@.@@@@.@@\n.@@@@@@@.@\n.@.@.@.@@@\n@.@@@.@@@@\n.@@@@@@@@.\n@.@.@@@.@.".to_string();
         assert_eq!(day04part1(input), 13);
     }

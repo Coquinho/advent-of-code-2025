@@ -26,9 +26,7 @@ impl FromStr for Bank {
             .map(|d| d as i8)
             .collect();
 
-        Ok(Bank {
-            bateries: bateries
-        })
+        Ok(Bank { bateries: bateries })
     }
 }
 
@@ -44,15 +42,15 @@ fn day03(input: String) -> i32 {
         for i in 1..bateries.len() {
             let batery = bateries[i];
 
-            if batery > first && i < bateries.len()-1 {
+            if batery > first && i < bateries.len() - 1 {
                 first = batery;
-                second = bateries[i+1];
+                second = bateries[i + 1];
                 continue;
             } else if batery > second {
                 second = batery;
             }
         }
-        let joltage = (first as i32)*10+(second as i32);
+        let joltage = (first as i32) * 10 + (second as i32);
         sum += joltage;
         println!("{:?} {:?} {:?} {:?}", sum, joltage, first, second);
     }
@@ -66,7 +64,8 @@ mod test {
 
     #[test]
     fn example_part1() {
-        let input = "987654321111111\n811111111111119\n234234234234278\n818181911112111".to_string();
+        let input =
+            "987654321111111\n811111111111119\n234234234234278\n818181911112111".to_string();
         assert_eq!(day03(input), 357);
     }
 
