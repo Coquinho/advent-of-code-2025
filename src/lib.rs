@@ -1,6 +1,6 @@
-pub fn read_from_str_one_liner<T: std::str::FromStr>(input: &str) -> Vec<T> {
+pub fn read_from_str_one_liner<T: std::str::FromStr>(input: &str, split_value: char) -> Vec<T> {
     input
-        .split(',')
+        .split(split_value)
         .filter_map(|line| line.trim().parse().ok())
         .collect()
 }

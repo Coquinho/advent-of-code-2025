@@ -104,7 +104,7 @@ fn is_valid_string_part2_size(s: &str, size: usize) -> bool {
 }
 
 fn day02(input: String, part2: bool) -> i64 {
-    let ranges: Vec<Range> = aoc::read_from_str_one_liner(&input);
+    let ranges: Vec<Range> = aoc::read_from_str_one_liner(&input, ',');
     let mut sum = 0;
 
     for range in ranges {
