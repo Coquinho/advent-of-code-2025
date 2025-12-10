@@ -1,9 +1,7 @@
 use std::str::FromStr;
 
-#[derive(Debug, PartialEq)]
-struct Board {
-    board: Vec<Vec<char>>,
-}
+#[derive(Debug, PartialEq, Clone)]
+struct Board(Vec<Vec<char>>);
 
 #[derive(Debug, PartialEq)]
 pub enum ParseBoardError {
@@ -41,7 +39,7 @@ impl FromStr for Board {
         }
         board.push(vec![NON_BLOCK; width]);
 
-        Ok(Board { board: board })
+        Ok(Board(board))
     }
 }
 
@@ -53,7 +51,7 @@ fn can_move(board: &Board, i: usize, j: usize) -> bool {
             if n_i == i && n_j == j {
                 continue;
             }
-            if board.board[n_i][n_j] == '@' {
+            if board.0[n_i][n_j] == '@' {
                 neighboors_count += 1;
             }
 
@@ -66,20 +64,34 @@ fn can_move(board: &Board, i: usize, j: usize) -> bool {
     neighboors_count < 4
 }
 
-fn day04part1(input: String) -> i32 {
+#[derive(PartialEq)]
+enum Mode {
+    Infinity,
+    Once,
+}
+
+fn day04(input: String, mode: Mode) -> i32 {
     let mut movable_rolls = 0;
 
-    let board: Board = Board::from_str(&input).expect("Error parsing board");
+    let mut board: Board = Board::from_str(&input).expect("Error parsing board");
+    let mut try_move = true;
 
-    for i in 1..(board.board.len() - 1) {
-        let line = &board.board[i];
-        for j in 1..(line.len() - 1) {
-            if line[j] != '@' {
-                continue;
-            }
-            let less_than_for_neighboors = can_move(&board, i, j);
-            if less_than_for_neighboors {
-                movable_rolls += 1;
+    while try_move {
+        try_move = false;
+        for i in 1..(board.0.len() - 1) {
+            let line = &board.0[i].clone();
+            for j in 1..(line.len() - 1) {
+                if line[j] != '@' {
+                    continue;
+                }
+                let less_than_for_neighboors = can_move(&board, i, j);
+                if less_than_for_neighboors {
+                    if mode == Mode::Infinity {
+                        board.0[i][j] = '.';
+                        try_move = true;
+                    }
+                    movable_rolls += 1;
+                }
             }
         }
     }
@@ -87,12 +99,20 @@ fn day04part1(input: String) -> i32 {
     movable_rolls
 }
 
+fn day04part1(input: String) -> i32 {
+    day04(input, Mode::Once)
+}
+
+fn day04part2(input: String) -> i32 {
+    day04(input, Mode::Infinity)
+}
+
 #[cfg(test)]
 mod test {
     use super::*;
 
     #[test]
-    fn example_par1() {
+    fn example_part1() {
         let input = "..@@.@@@@.\n@@@.@.@.@@\n@@@@@.@.@@\n@.@@@@..@.\n@@.@@@@.@@\n.@@@@@@@.@\n.@.@.@.@@@\n@.@@@.@@@@\n.@@@@@@@@.\n@.@.@@@.@.".to_string();
         assert_eq!(day04part1(input), 13);
     }
@@ -101,5 +121,17 @@ mod test {
     fn puzzle_part1() {
         let input = std::fs::read_to_string("input/day_04.txt").expect("Failled to read file");
         assert_eq!(day04part1(input), 1547);
+    }
+
+    #[test]
+    fn example_part2() {
+        let input = "..@@.@@@@.\n@@@.@.@.@@\n@@@@@.@.@@\n@.@@@@..@.\n@@.@@@@.@@\n.@@@@@@@.@\n.@.@.@.@@@\n@.@@@.@@@@\n.@@@@@@@@.\n@.@.@@@.@.".to_string();
+        assert_eq!(day04part2(input), 43);
+    }
+
+    #[test]
+    fn puzzle_part2() {
+        let input = std::fs::read_to_string("input/day_04.txt").expect("Failled to read file");
+        assert_eq!(day04part2(input), 8948);
     }
 }
